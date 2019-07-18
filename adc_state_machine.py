@@ -28,7 +28,7 @@ class ADC_state_machine:
       self._num_bits = number
       self._current_code  = 2**(number-1)
    
-   def set_num_steps(self,steps,):
+   def set_num_steps(self,steps):
       if (steps < self._num_bits):
          print('Attempted to set steps to '+str(steps))
          self.report_adc_stats()
@@ -59,6 +59,7 @@ class ADC_state_machine:
             counter = counter - 1
          self._steps = temp_step_list
       else:
+         self.set_num_steps(len(steps))
          self._steps = steps.copy()
       return
    
@@ -83,6 +84,9 @@ class ADC_state_machine:
                #print('-' + str(self._steps[self._step_pointer]))
             #print('currentcode ' + str(self._current_code))
             self._step_pointer = self._step_pointer + 1
+         # Keep the output within ADC range to take care of overflow
+         self._current_code = max(self._current_code, 0)
+         self._current_code = min(self._current_code, 2**(self._num_bits)-1)
       # Not edge? Just update the clock
       self._past_clock = current_clk
       

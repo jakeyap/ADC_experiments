@@ -14,6 +14,7 @@ class Comparator:
       self._hysteresis = False # decides whether to acc for hysteresis
       self._hys_window = 1e-3  # sets hysteresis window
       self._prevclockstep = 0
+      self._min_detectable_diff = 1e-3
    
    def compare(self, pos_input, neg_input, clockstep):
       if (self._prevclockstep==0 and clockstep==1):
@@ -27,9 +28,15 @@ class Comparator:
             else:
                adjusted_pos_input = adjusted_pos_input - self._hys_window / 2
          
-         state = int( adjusted_pos_input > neg_input )
-         self._past_state = state
-         return state
+         output = adjusted_pos_input - neg_input
+         if output > self._min_detectable_diff:
+            self._past_state = 1
+         elif output <  ( - self._min_detectable_diff):
+            self._past_state = 0
+         else:
+            self._past_state = np.random.randint(0,2)
+            self._past_state = 1
+         return self._past_state
       else:
          return self._past_state
    
