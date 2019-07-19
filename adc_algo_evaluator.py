@@ -11,8 +11,8 @@ from adc import ADC
 import adc_ramp_processor as adc_eval
 import helper_functions as helper
 
-#weird_steps = [4,2,1,1]
-weird_steps = [16,7,5,3,2,1]
+weird_steps = [4,2,1,1]
+#weird_steps = [16,7,5,3,2,1]
 #weird_steps = None
 
 #weird_steps = [4,2,1]
@@ -78,8 +78,8 @@ def time_domain_probe(num_bits = 10,
 
 
 if __name__ == '__main__':
-   time_domain_test = True
-   num_bits = 5
+   time_domain_test = False
+   num_bits = 3
    offset=0.5
    tau=0.4
    vin=3.55
