@@ -21,7 +21,10 @@ class Taublock:
       self._alpha = 0
       self._beta = 0
       self._recalculate_alpha_beta()
-      
+   
+   def read_output(self):
+      return self._oldstate
+   
    def update_output(self,newstate):
       '''
       Call this with an input to tell output.
@@ -54,6 +57,7 @@ class Taublock:
    
    def set_timestep (self, timestep):
       self._timestep = timestep
+      self._recalculate_alpha_beta()
 
 
 if __name__ == '__main__':
