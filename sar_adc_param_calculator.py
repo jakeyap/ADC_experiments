@@ -6,6 +6,7 @@ Created on Mon Jul 22 11:01:40 2019
 """
 from Taublock import Taublock
 import matplotlib.pyplot as plt
+import numpy as np
 
 def calculate_sampling_cap_size (num_bits = 10, v_fullscale=1, temp=298):
    '''
@@ -86,13 +87,16 @@ def calculate_settling_errors(num_bits=10,
            'errors_list':errors_list,
            'error_trans':error_trans}
 
+def calculate_1_cycle_settling(tau):
+   return np.exp(-1/tau)
+   
    
 if __name__ == '__main__':
    #calculate_sampling_cap_size(num_bits=10, v_fullscale=1)
    num_bits = 12
    tau = 0.3
    steps = None
-   steps = [2048,1011,456,253,144,80,45,26,14,8,4,3,2,1]
+   #steps = [2048,1011,456,253,144,80,45,26,14,8,4,3,2,1]
    
    temp = calculate_settling_errors(tau=tau, num_bits=num_bits,steps=steps)
    steps = temp['steps']
