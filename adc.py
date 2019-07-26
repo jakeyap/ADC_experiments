@@ -95,16 +95,21 @@ class ADC:
               'done': done_copy}
    
    def set_fsm_steps(self, steps):
-      self._fsm.set_steps(steps)
+      if steps is None:
+         pass
+      else:
+         self._fsm.set_steps(steps)
    
    def return_output(self):
       return self._soln
 
 if __name__ == '__main__':
-   num_bits = 7
+   num_bits = 12
    offset = 0.5
    tau = 6
    plot_decision_tree = False
+   
+   steps = [2048,1011,456,253,144,80,45,26,14,8,4,3,2,1]
    
    datasize = int(10 * 2**num_bits)
    #datasize = 1

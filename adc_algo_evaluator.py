@@ -11,7 +11,8 @@ from adc import ADC
 import adc_ramp_processor as adc_eval
 import helper_functions as helper
 
-weird_steps = [4,2,1,1]
+# weird_steps = [4,2,1,1]
+weird_steps = [2048,1011,456,253,144,80,45,26,14,8,4,3,2,1]
 #weird_steps = [16,7,5,3,2,1]
 #weird_steps = None
 
@@ -24,7 +25,8 @@ def static_tests_sweep(num_bits = 7,
                        offset = 0.5,
                        tau = 6,
                        plot_decision_tree = False,
-                       bucketsize = 20):
+                       bucketsize = 20, 
+                       steps = None):
    
    datasize = int(bucketsize * 2**num_bits)
    input_axis = np.linspace(0,2**num_bits,datasize)
@@ -35,7 +37,7 @@ def static_tests_sweep(num_bits = 7,
       adcinstance = ADC(tau=tau,num_bits=num_bits)
       adc2 = ADC(tau=tau,num_bits=num_bits)
       #adcinstance.set_fsm_steps(weird_steps)
-      adc2.set_fsm_steps(weird_steps)
+      adc2.set_fsm_steps(steps)
       inputvoltage = input_axis[counter] + offset
       adcinstance.run_1_adc_sample(vin= inputvoltage)
       adc2.run_1_adc_sample(vin= inputvoltage)
@@ -57,11 +59,12 @@ def static_tests_sweep(num_bits = 7,
 def time_domain_probe(num_bits = 10,
                        offset = 0.5,
                        tau = 6,
-                       vin=0):
+                       vin=0,
+                       steps=None):
    adcinstance = ADC(tau=tau,num_bits=num_bits)
    adc2 = ADC(tau=tau,num_bits=num_bits)
    # adcinstance.set_fsm_steps(weird_steps)
-   adc2.set_fsm_steps(weird_steps)
+   adc2.set_fsm_steps(steps)
    inputvoltage = vin + offset
    adcinstance.run_1_adc_sample(vin= inputvoltage)
    adc2.run_1_adc_sample(vin= inputvoltage)
@@ -79,16 +82,19 @@ def time_domain_probe(num_bits = 10,
 
 if __name__ == '__main__':
    time_domain_test = False
-   num_bits = 3
+   num_bits = 12
    offset=0.5
-   tau=0.4
+   tau=0.3
    vin=3.55
-   binsize = 50
+   binsize = 10
+   steps = [2048,1011,456,253,144,80,45,26,14,8,4,3,2,1]
+   
    if (time_domain_test):
       time_domain_probe(num_bits=num_bits,
                         offset=offset,
                         tau=tau,
-                        vin=vin)
+                        vin=vin,
+                        steps=steps)
       plt.subplot(3,1,2)
       #plt.ylim([0,5])
    else:
@@ -96,4 +102,5 @@ if __name__ == '__main__':
                        offset=offset,
                        tau=tau,
                        plot_decision_tree=False,
-                       bucketsize=binsize)
+                       bucketsize=binsize,
+                       steps=steps)

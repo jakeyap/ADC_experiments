@@ -96,7 +96,7 @@ if __name__ == '__main__':
    num_bits = 12
    tau = 0.3
    steps = None
-   #steps = [2048,1011,456,253,144,80,45,26,14,8,4,3,2,1]
+   steps = [2048,1011,456,253,144,80,45,26,14,8,4,3,2,1]
    
    temp = calculate_settling_errors(tau=tau, num_bits=num_bits,steps=steps)
    steps = temp['steps']
@@ -119,3 +119,10 @@ if __name__ == '__main__':
       print(eacherror)
    #plt.plot(dac_outputs)
    #plt.plot(lpf_outputs)
+   ans1 = steps [0]
+   ans2 = steps [0]
+   for each in steps[1:]:
+      ans1 = ans1 - each
+      ans2 = ans2 + each
+   print (ans1)
+   print (ans2)
