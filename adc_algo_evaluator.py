@@ -84,7 +84,7 @@ if __name__ == '__main__':
    time_domain_test = False
    num_bits = 12
    offset=0.5
-   tau=0.3
+   tau=0.35
    vin=3.55
    binsize = 10
    steps = [2048,1011,456,253,144,80,45,26,14,8,4,3,2,1]

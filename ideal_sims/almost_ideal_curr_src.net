@@ -1,0 +1,36 @@
+* C:\Users\Bruce Banner\Documents\GitHub\ADC_experiments\ideal_sims\almost_ideal_curr_src.asc
+V1 IN_AC 0 1 AC 1
+V2 VDD 0 {vdd}
+R2 OUT_AC N001 10Meg
+C2 N001 0 10m
+XX1 N001 OUT_AC IN_AC VDD 0 fake_reference params: res={res} cap={cap} vdd={vdd}
+XX2 OUT_TRAN OUT_TRAN N002 VDD 0 fake_reference params: res={res} cap={cap} vdd={vdd}
+V3 N002 0 PULSE({1-amp} {1+amp} 1u 10n 10n 1u 2u)
+C1 OUT_TRAN 0 {CL}
+C3 OUT_AC 0 {CL}
+
+* block symbol definitions
+.subckt fake_reference FB OUT REF VDD VSS
+E1 N001 VSS REF FB table=({-1/gain} 0, {1/gain} {vdd})
+R1 OUT VSS {RES}
+C1 OUT VSS {CAP}
+M1 VDD N002 OUT OUT NMOS W=100u L=200n
+R3 N002 N001 {RO}
+C3 N002 VSS {CGATE}
+M2 VSS N002 OUT OUT PMOS W=100u L=200n
+.lib 130nm_bulk.txt
+.param res=10k cap=1n ro=1k cgate=10p gain=10k
+.ends fake_reference
+
+.model NMOS NMOS
+.model PMOS PMOS
+.lib C:\Users\Bruce Banner\Documents\LTspiceXVII\lib\cmp\standard.mos
+.lib 130nm_bulk.txt
+.param res=10k cap=1n cl=10n vdd=2
+* .ac dec 10 1 10G
+* .step param cap list 1n 10n 100n
+.param amp=100m
+.tran 10u
+.step param res list 1k 10k 100k
+.backanno
+.end

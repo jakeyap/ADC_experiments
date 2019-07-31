@@ -87,6 +87,29 @@ def calculate_settling_errors(num_bits=10,
            'errors_list':errors_list,
            'error_trans':error_trans}
 
+def calculate_overflow(num_bits, steps):
+   m = len(steps)
+   redundancies = calculate_redundancies(steps)
+   print('redundancies', end='\t')
+   print(redundancies)
+   summation = 0
+   for index in range(m-1):
+      summation = summation + (2**(index+1)) * redundancies[index]
+   overrange = (2**m - 2**num_bits - summation) / 2
+   print('Over range is %d LSBs' % overrange)
+   
+
+def calculate_redundancies(steps):
+   redundancies = []
+   m = len(steps)
+   for index in range(m-2):
+      redundancies.append( - steps[index+1] + 1 + sum(steps[index+2:]))
+   # for index m-2
+   redundancies.append(0)
+   # for index m-1
+   redundancies.append(0)
+   return redundancies
+
 def calculate_1_cycle_settling(tau):
    return np.exp(-1/tau)
    
@@ -94,7 +117,7 @@ def calculate_1_cycle_settling(tau):
 if __name__ == '__main__':
    #calculate_sampling_cap_size(num_bits=10, v_fullscale=1)
    num_bits = 12
-   tau = 0.3
+   tau = 0.47
    steps = None
    steps = [2048,1011,456,253,144,80,45,26,14,8,4,3,2,1]
    
@@ -115,8 +138,8 @@ if __name__ == '__main__':
    plt.plot(time_axis, error_trans)
    plt.yscale('log')
    plt.grid(True)
-   for eacherror in errors_list:
-      print(eacherror)
+   print('Errors')
+   print(errors_list)
    #plt.plot(dac_outputs)
    #plt.plot(lpf_outputs)
    ans1 = steps [0]
@@ -126,3 +149,6 @@ if __name__ == '__main__':
       ans2 = ans2 + each
    print (ans1)
    print (ans2)
+   
+   #steps = [2048,1024,372,237,153,95,59,38,25,16,10,7,4,3,2,1,1]
+   calculate_overflow(12,steps)
