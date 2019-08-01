@@ -2,44 +2,81 @@
 
 module adc_fsm_testbench;
    
-   wire fire_comp, comp_done, comp_result, sample, adc_done;
-   wire [11:0] dac_value, result;
+   wire fire_comp1, comp_done1, comp_result1, sample1, adc_done1;
+   wire fire_comp2, comp_done2, comp_result2, sample2, adc_done2;
+   wire [11:0] dac_value1, result1;
+   wire [11:0] dac_value2, result2;
    reg  [11:0] reference = 0;
    
-   reg delayed_comp_done=0;
-   reg delayed_comp_result=0;
-   reg delayed_fire_comp=0;
+   reg delayed_comp_done1=0;
+   reg delayed_comp_done2=0;
+   reg delayed_comp_result1=0;
+   reg delayed_comp_result2=0;
+   reg delayed_fire_comp1=0;
+   reg delayed_fire_comp2=0;
    reg st_conv, rst;
    
    reg [12:0] index = 0;
-   reg [11:0]  summary_results;
+   reg [11:0] summary_results1;
+   reg [11:0] summary_results2;
    
-   always @(comp_done) delayed_comp_done <= #0.5 comp_done;
-   always @(comp_result) delayed_comp_result <= #0.5 comp_result;
-   always @(fire_comp) delayed_fire_comp <= #0.5 fire_comp;
+   always @(comp_done1) delayed_comp_done1 <= #0.5 comp_done1;
+   always @(comp_done2) delayed_comp_done2 <= #0.5 comp_done2;
    
-   adc_fsm_v0 adc1(  .st_conv(st_conv),
-                     .clkout(fire_comp),
-                     .clkin(delayed_comp_done),
-                     .sample(sample),
-                     .result(result),
-                     .dac_value(dac_value),
-                     .comp_in(delayed_comp_result),
-                     .adc_done(adc_done),
-                     .rst(rst));
+   always @(comp_result1) delayed_comp_result1 <= #0.5 comp_result1;
+   always @(comp_result2) delayed_comp_result2 <= #0.5 comp_result2;
+   
+   always @(fire_comp1) delayed_fire_comp1 <= #0.5 fire_comp1;
+   always @(fire_comp2) delayed_fire_comp2 <= #0.5 fire_comp2;
+   
+   adc_fsm_12b_generic_v0 adc1(.st_conv(st_conv),
+                           .clkout(fire_comp1),
+                           .clkin(delayed_comp_done1),
+                           .sample(sample),
+                           .result(result1),
+                           .dac_value(dac_value1),
+                           .comp_in(delayed_comp_result1),
+                           .adc_done(adc_done1),
+                           .rst(rst),
+                           .sel_14b(1'b0));
 
    ideal_comparator comp1( .vip(reference), 
-                           .vin(dac_value), 
-                           .comp_result(comp_result), 
-                           .comp_done(comp_done), 
-                           .clk(delayed_fire_comp), 
+                           .vin(dac_value1), 
+                           .comp_result(comp_result1), 
+                           .comp_done(comp_done1), 
+                           .clk(delayed_fire_comp1), 
                            .rst(rst));
-
-   always @ (posedge adc_done or rst) begin
+   
+   adc_fsm_12b_generic_v0 adc2(.st_conv(st_conv),
+                           .clkout(fire_comp2),
+                           .clkin(delayed_comp_done2),
+                           .sample(sample),
+                           .result(result2),
+                           .dac_value(dac_value2),
+                           .comp_in(delayed_comp_result2),
+                           .adc_done(adc_done2),
+                           .rst(rst),
+                           .sel_14b(1'b1));
+                           
+   ideal_comparator comp2( .vip(reference), 
+                           .vin(dac_value2), 
+                           .comp_result(comp_result2), 
+                           .comp_done(comp_done2), 
+                           .clk(delayed_fire_comp2), 
+                           .rst(rst));
+   
+   always @ (posedge adc_done1 or posedge rst) begin
       if (rst) 
-         summary_results <= 0;
+         summary_results1 <= 0;
       else
-         summary_results <= result;
+         summary_results1 <= result1;
+   end
+   
+   always @ (posedge adc_done2 or posedge rst) begin
+      if (rst) 
+         summary_results1 <= 0;
+      else
+         summary_results2 <= result2;
    end
    
    initial
@@ -53,9 +90,6 @@ module adc_fsm_testbench;
       #1 rst = 0;
       
       for (index=0; index<4096; index = index + 1) begin
-         #1 rst = 0;
-         #1 rst = 1;
-         #1 rst = 0;
          #1 st_conv = 1;
          #1 st_conv = 0;
          #28 reference = reference + 1;
