@@ -16,9 +16,13 @@ module adc_fsm_testbench;
    reg delayed_fire_comp2=0;
    reg st_conv, rst;
    
-   reg [12:0] index = 0;
+   reg [12:0] index = 0;      // loop counter
+   reg [12:0] innerindex = 0; // Inner loop counter
    reg [11:0] summary_results1;
    reg [11:0] summary_results2;
+   
+   integer textfile1 = 0;
+   integer textfile2 = 0;
    
    always @(comp_done1) delayed_comp_done1 <= #0.5 comp_done1;
    always @(comp_done2) delayed_comp_done2 <= #0.5 comp_done2;
@@ -79,10 +83,11 @@ module adc_fsm_testbench;
          summary_results2 <= result2;
    end
    
-   initial
-   begin
+   initial begin
       st_conv = 0;
       rst = 0;
+      textfile1 = $fopen("output1.csv","w");
+      textfile2 = $fopen("output2.csv","w");
       $dumpfile("log.vcd");
 		$dumpvars;
       #1 rst = 0;
@@ -90,10 +95,17 @@ module adc_fsm_testbench;
       #1 rst = 0;
       
       for (index=0; index<4096; index = index + 1) begin
-         #1 st_conv = 1;
-         #1 st_conv = 0;
-         #28 reference = reference + 1;
+         for (innerindex=0;innerindex<4; innerindex = innerindex+1) begin
+            #1 st_conv = 1;
+            #1 st_conv = 0;
+            #28 $fwrite(textfile1,"%d,%d\n",reference,summary_results1);
+            $fwrite(textfile2,"%d,%d\n",reference,summary_results2);
+         end
+         reference = reference + 1;
       end
+      
+      #1 $fclose(textfile1);
+      #1 $fclose(textfile2);
       #10 $finish;
    end
 

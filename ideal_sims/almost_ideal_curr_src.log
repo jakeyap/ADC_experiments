@@ -7,54 +7,94 @@ Gmin = 1.07374
 Gmin = 0.115292
 Gmin = 0.0123794
 Gmin = 0.00132923
-Gmin = 0.000142725
 vernier = 0.5
+Gmin = 0.000247786
 vernier = 0.25
 vernier = 0.125
 vernier = 0.0625
 vernier = 0.03125
-Gmin = 0.000167911
+Gmin = 0.000250497
 vernier = 0.015625
 vernier = 0.0078125
+Gmin = 0.0002471
 vernier = 0.0104167
-Gmin = 0.000165849
 vernier = 0.0138889
-Gmin = 0.000160894
+Gmin = 0.000239924
 vernier = 0.0185185
 vernier = 0.0246913
-Gmin = 0.000153102
+Gmin = 0.000228919
 vernier = 0.0329218
+Gmin = 0.000212634
 vernier = 0.0438957
-Gmin = 0.000141535
 vernier = 0.0585276
-Gmin = 0.00012463
+Gmin = 0.000187914
 vernier = 0.0780367
 vernier = 0.104049
-Gmin = 0.000101277
+Gmin = 0.000154415
 vernier = 0.138732
+Gmin = 0.000113563
 vernier = 0.184976
-Gmin = 7.30423e-005
 vernier = 0.246634
-Gmin = 4.32001e-005
+Gmin = 6.81553e-005
 vernier = 0.328846
 vernier = 0.438461
-Gmin = 1.854e-005
+Gmin = 3.05712e-005
 vernier = 0.584614
+Gmin = 8.89541e-006
 vernier = 0.779486
-Gmin = 5.00974e-006
 vernier = 1
-Gmin = 6.73999e-007
-Gmin = 7.23701e-008
+Gmin = 1.25198e-006
+Gmin = 1.34431e-007
 vernier = 0.5
-vernier = 0.666667
-Gmin = 2.52904e-008
-vernier = 0.888888
+vernier = 0.25
+vernier = 0.125
+Gmin = 6.11809e-008
+vernier = 0.0625
+vernier = 0.03125
+vernier = 0.015625
+vernier = 0.0078125
+Gmin = 5.88671e-008
+vernier = 0.00390625
+vernier = 0.00195313
+Gmin = 5.86091e-008
+vernier = 0.00260417
+vernier = 0.00347222
+Gmin = 5.81784e-008
+vernier = 0.00462963
+vernier = 0.00617283
+Gmin = 5.74982e-008
+vernier = 0.00823044
+Gmin = 5.64442e-008
+vernier = 0.0109739
+vernier = 0.0146319
+Gmin = 5.47189e-008
+vernier = 0.0195092
+vernier = 0.0260122
+Gmin = 5.20784e-008
+vernier = 0.034683
+Gmin = 4.81838e-008
+vernier = 0.046244
+vernier = 0.0616586
+Gmin = 4.23033e-008
+vernier = 0.0822114
+vernier = 0.109615
+Gmin = 3.44027e-008
+vernier = 0.146154
+Gmin = 2.48952e-008
+vernier = 0.194871
+vernier = 0.259828
+Gmin = 1.45491e-008
+vernier = 0.346438
+vernier = 0.461917
+Gmin = 6.26335e-009
+vernier = 0.615889
+Gmin = 1.71312e-009
+vernier = 0.821185
 vernier = 1
-Gmin = 3.82213e-009
-Gmin = 4.10398e-010
-Gmin = 4.40661e-011
-Gmin = 4.73156e-012
-Gmin = 5.08048e-013
+Gmin = 2.28868e-010
+Gmin = 2.45745e-011
+Gmin = 2.63867e-012
+Gmin = 2.83325e-013
 Gmin = 0
 Gmin stepping succeeded in finding the operating point.
 
@@ -70,19 +110,19 @@ Ignoring empty pin current: Ix(x2:ref)
 .step res=10000
 .step res=100000
 
-Date: Tue Jul 30 17:49:34 2019
-Total elapsed time: 0.784 seconds.
+Date: Thu Aug 01 14:37:20 2019
+Total elapsed time: 0.525 seconds.
 
 tnom = 27
 temp = 27
 method = modified trap
-totiter = 8484
-traniter = 6090
-tranpoints = 2204
-accept = 1823
-rejected = 381
-matrix size = 31
+totiter = 5116
+traniter = 2519
+tranpoints = 1239
+accept = 1196
+rejected = 43
+matrix size = 23
 fillins = 3
-Matrix Compiler1: 4.09 KB object code size  0.7/0.5/[0.4]
-Matrix Compiler2: off  [0.5]/0.7/0.5
+Matrix Compiler1: 2.51 KB object code size  0.5/0.4/[0.1]
+Matrix Compiler2: 2.43 KB object code size  0.4/0.5/[0.4]
 

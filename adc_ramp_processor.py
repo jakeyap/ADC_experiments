@@ -58,7 +58,7 @@ def _extract_lists_from_file(directory, filename, ignore_row=0, ignore_col=0):
    outputs = []
    counter = 0
    for eachrow in file:
-      if (counter > ignore_row):
+      if (counter > ignore_row-1):
          inputs.append( float(eachrow[ignore_col+0]) )
          outputs.append( int(eachrow[ignore_col+1]) )
       counter = counter + 1
@@ -185,7 +185,25 @@ def eval_adc_from_lists(inputlist, outputlist, title=''):
    _plot_inl(cache['buckets'], cache['inl'])
    plt.show()
    return cache
-   
+
+def find_missing_codes(directory, filename, ignore_row=0, ignore_col=0):
+   [inputlist, outputlist] = _extract_lists_from_file(directory, filename, ignore_row=0, ignore_col=0)
+   cache = _extract_ramp_from_lists(inputlist, outputlist)
+   buckets = cache['buckets']
+   counts  = cache['counts']
+   missingcodes = []
+   for index in range(len(buckets)):
+      if (counts[index] == 0):
+         missingcodes.append(buckets[index])
+   if (len(missingcodes)==0):
+      print('There are no missing codes')
+   else:
+      print ('!!!')
+      print ('Missing codes are shown here.')
+      print (missingcodes)
+      print ('!!!')
+   return missingcodes
+
 def eval_adc_from_file(directory, filename, ignore_row=0, ignore_col=0):
    '''
    Evaluates ADC from a csv file
@@ -200,6 +218,11 @@ def eval_adc_from_file(directory, filename, ignore_row=0, ignore_col=0):
    return eval_adc_from_lists(inputlist,outputlist,title=filename)
    
 if __name__ == '__main__':
-   directory = 'C:/Users/Bruce Banner/Documents/SG/results/done/'
-   filename = 'P02A_44_ADC_readings.csv'
-   eval_adc_from_file(directory,filename)
+   directory = './adc_hdl/'
+   filename1 = 'output1.csv'
+   filename2 = 'output2.csv'
+   cache1 = eval_adc_from_file(directory,filename1)
+   cache2 = eval_adc_from_file(directory,filename2)
+   
+   find_missing_codes(directory, filename1)
+   find_missing_codes(directory, filename2)
