@@ -1,0 +1,2 @@
+30th december 2019
+The 10 bit 10/12 steps algorithm is verified to be equivalent in verilog already
