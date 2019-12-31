@@ -6,6 +6,8 @@ module testbench_adc_fsm_osc;
    wire fire_comp2, comp_done2, comp_result2, sample2, adc_done2;
    wire [9:0] dac_value1, result1;
    wire [9:0] dac_value2, result2;
+   wire [9:0] comp_input1, comp_input2;
+   wire [9:0] float1, float2;
    reg  [9:0] reference = 0;
    
    reg delayed_comp_done1=0;
@@ -33,10 +35,13 @@ module testbench_adc_fsm_osc;
    always @(fire_comp1) delayed_fire_comp1 <= #0.5 fire_comp1;
    always @(fire_comp2) delayed_fire_comp2 <= #0.5 fire_comp2;
    
+   samplehold sh1 (comp_input1, sample1, float1, dac_value1);
+   samplehold sh2 (comp_input2, sample2, float2, dac_value2);
+   
    adc_fsm_10b_v1 adc1( .st_conv(st_conv),
                         .clkout(fire_comp1),
                         .clkin(delayed_comp_done1),
-                        .sample(),
+                        .sample(sample1),
                         .result(result1),
                         .dac_value(dac_value1),
                         .dac_msb(),
@@ -46,9 +51,13 @@ module testbench_adc_fsm_osc;
                         .rst(rst),
                         .sel_12b(1'b1),
                         .cal(1'b0));
-
+   
+   conditional_offset osc_block1(   .vin(dac_value1), 
+                                    .vout(comp_input1),
+                                    .offset(offset));
+   
    ideal_comparator_10b comp1(.vip(reference), 
-                              .vin(dac_value1+offset), 
+                              .vin(float1), 
                               .comp_result(comp_result1), 
                               .comp_done(comp_done1), 
                               .clk(delayed_fire_comp1), 
@@ -57,7 +66,7 @@ module testbench_adc_fsm_osc;
    adc_fsm_10b_v1 adc2( .st_conv(st_conv),
                         .clkout(fire_comp2),
                         .clkin(delayed_comp_done2),
-                        .sample(),
+                        .sample(sample2),
                         .result(result2),
                         .dac_value(dac_value2),
                         .dac_msb(),
@@ -67,9 +76,13 @@ module testbench_adc_fsm_osc;
                         .rst(rst),
                         .sel_12b(1'b1),
                         .cal(cal));
+                        
+   conditional_offset osc_block2(   .vin(dac_value2), 
+                                    .vout(comp_input2),
+                                    .offset(offset));
                            
    ideal_comparator_10b comp2(.vip(reference), 
-                              .vin(dac_value2+offset), 
+                              .vin(float2), 
                               .comp_result(comp_result2), 
                               .comp_done(comp_done2), 
                               .clk(delayed_fire_comp2), 
@@ -93,7 +106,7 @@ module testbench_adc_fsm_osc;
       st_conv = 0;
       rst = 0;
       cal = 0;
-      textfile1 = $fopen("output_osc.csv","w");
+      textfile1 = $fopen("output_osc_100.csv","w");
       $fwrite(textfile1,"ref,adc1,adc2,\n");
       $dumpfile("log_osc.vcd");
 		$dumpvars;
@@ -106,7 +119,7 @@ module testbench_adc_fsm_osc;
       #1 st_conv = 0;
       #40 $fwrite(textfile1,"%d,%d,%d\n",reference,summary_results1,summary_results2);
       #1 cal = 0;
-      
+      #1 reference = 0;
       for (index=0; index<1024; index = index + 1) begin
          for (innerindex=0;innerindex<1; innerindex = innerindex+1) begin
             #1 st_conv = 1;

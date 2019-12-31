@@ -1,2 +1,5 @@
 30th december 2019
-The 10 bit 10/12 steps algorithm is verified to be equivalent in verilog already
+The 10 bit 10/12 steps algorithm is verified to be functionally equivalent in verilog already
+
+31st december 2019
+there is some issues simulating the sample and hold to emulate an analog one. draw it out to do it carefully first.

@@ -9,6 +9,8 @@ http://codeitdown.com/icarus-verilog-on-windows/
 iverilog is the verilog intepreter tool
 gtkwave is the GUI to view the results
 
+Need to go dig the directories for where iverilog and GTKwave are in, then add the to environent variables.
+
 let's say you have a file called testbench.v and there are 2 modules called moduleA.v and moduleB.v that are instantiated inside testbench.
 
 the command to run the simulation is as follows.
