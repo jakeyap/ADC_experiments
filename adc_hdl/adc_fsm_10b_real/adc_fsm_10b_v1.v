@@ -96,6 +96,7 @@ module adc_fsm_10b_v1(  st_conv,
    always @ (negedge st_conv) begin
       // If st_conv has a falling edge, start the conversion
       state    <= sConv;
+      result   <= 10'b0;
    end
    
    // synchronous design
@@ -112,6 +113,7 @@ module adc_fsm_10b_v1(  st_conv,
                state    <= sDone;
                pointer  <= pointer;
                if (cal) begin
+                  //offset <= (result + (steps[pointer] && comp_in)) - 10'd512 ;
                   offset <= 10'd512 - (result + (steps[pointer] && comp_in));
                end
             end

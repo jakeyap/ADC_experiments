@@ -91,7 +91,7 @@ module testbench_adc_fsm_12s;
    initial begin
       st_conv = 0;
       rst = 0;
-      textfile1 = $fopen("output1.csv","w");
+      textfile1 = $fopen("adc_ecc.csv","w");
       $fwrite(textfile1,"ref,adc1,adc2,\n");
       $dumpfile("log.vcd");
 		$dumpvars;

@@ -1,16 +1,26 @@
 `timescale 100ns/1ns
 
-module samplehold(vin, sample, topcap, botcap);
+module samplehold(vin, sample, vout);
    
    input sample;
-   input [9:0] vin, botcap; 
-   output [9:0] topcap;
+   input [9:0] vin; 
+   output [11:0] vout;
    
-   reg stored_value;
+   reg [11:0] vin_se;
+   reg [11:0] stored_value;
    
-   always @ (negedge sample) begin
-      stored_value <= vin - botcap;
+   always @ * begin
+      vin_se <= {2'b0, vin[9:0]};
    end
    
-   assign topcap = botcap + stored_value;
+   always @ (negedge sample) begin
+      stored_value <= 12'd512 - vin_se;
+   end
+   
+   always @ (posedge sample) begin
+      stored_value <= 12'd0;
+   end
+   
+   assign vout = $signed(vin_se) - $signed(stored_value);
+   
 endmodule
